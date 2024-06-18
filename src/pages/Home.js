@@ -11,6 +11,11 @@ class Home extends Component {
       todos: [],
     };
   }
+
+  deleteTodo = (id) => {
+    const newtodos = this.state.todos.filter((todo) => todo.id !== id);
+    this.setState({ todos: newtodos })
+  }
   // the addTodo function simply creates a new array that includes the user submitted todo item and then
   // updates the state with the new list.
   addTodo = (todo) => {
@@ -19,6 +24,9 @@ class Home extends Component {
     // To avoid having dup values, we use the Math.random() function to generate a random value for a todo id.
     // This solution works for a small application but a more complex hashing function should be used when
     // dealing with a larger data sensitive project.
+    let duplicate = this.state.todos.find((todo_item) => todo_item.content === todo.content)
+    if (duplicate) { console.log(`dupes `, duplicate.content); return; };
+
     todo.id = Math.random();
     // Create a array that contains the current array and the new todo item
     let new_list = [...this.state.todos, todo];
@@ -27,6 +35,18 @@ class Home extends Component {
       todos: new_list,
     });
   };
+  // deleteTodo = (id) => {
+  //   const todos = this.state.todos.filter((todo) => {
+  //     return todo.id !== id;
+  //   });
+  //   this.setState({
+  //     todos: todos,
+  //   });
+  // };
+
+
+
+
   render() {
     return (
       <div className="Home">
@@ -36,7 +56,7 @@ class Home extends Component {
         <AddTodo addTodo={this.addTodo} />
         {/* When returning the Todos component, todos is a prop passed to the todos.js file
          to format and render the current todo list state */}
-        <Todos todos={this.state.todos} />
+        <Todos todos={this.state.todos} deleteTodo={this.deleteTodo} />
       </div>
     );
   }
